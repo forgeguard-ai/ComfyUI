@@ -1,0 +1,26 @@
+version: 1
+enabled: true
+
+project:
+  slug: comfyui
+  title: ForgeGuard ComfyUI
+  kind: maintained-fork
+  summary: Hardened, telemetry-free ComfyUI fork with built-in authentication and HTTPS, powering ComfyUI-Foundry images.
+
+repository:
+  owner: forgeguard-ai
+  name: ComfyUI
+  default_branch: master
+
+source:
+  content_root: docs/site
+  entrypoint: index.md
+
+publishing:
+  route: /projects/comfyui/docs
+  versions: both
+  include_generated: false
+
+upstream:
+  repository: comfyanonymous/ComfyUI
+  tracking_policy: tagged-releases

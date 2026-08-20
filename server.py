@@ -39,7 +39,6 @@ from comfy.deploy_environment import get_deploy_environment
 import comfy.utils
 import comfy.model_management
 from comfy_api import feature_flags
-from comfy.comfy_api_env import get_environment_overrides
 import node_helpers
 from comfyui_version import __version__
 from app.frontend_management import FrontendManager, parse_version
@@ -207,6 +206,9 @@ def create_block_external_middleware():
             response = await handler(request)
 
         response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' data:; frame-src 'self'; object-src 'self';"
+        response.headers.setdefault('X-Content-Type-Options', 'nosniff')
+        response.headers.setdefault('X-Frame-Options', 'DENY')
+        response.headers.setdefault('Referrer-Policy', 'same-origin')
         return response
 
     return block_external_middleware
@@ -238,8 +240,9 @@ class PromptServer():
         else:
             middlewares.append(create_origin_only_middleware())
 
-        if args.disable_api_nodes:
-            middlewares.append(create_block_external_middleware())
+        # ForgeGuard: always-on hardening headers (CSP blocks frontend egress);
+        # upstream only arms this with --disable-api-nodes.
+        middlewares.append(create_block_external_middleware())
 
         if args.enable_manager:
             middlewares.append(comfyui_manager.create_middleware())
@@ -730,7 +733,6 @@ class PromptServer():
                     "pytorch_version": comfy.model_management.torch_version,
                     "embedded_python": os.path.split(os.path.split(sys.executable)[0])[1] == "python_embeded",
                     "deploy_environment": get_deploy_environment(),
-                    "argv": sys.argv
                 },
                 "devices": device_entries
             }
@@ -739,9 +741,6 @@ class PromptServer():
         @routes.get("/features")
         async def get_features(request):
             features = feature_flags.get_server_features()
-            overrides = get_environment_overrides()
-            if overrides:
-                features.update(overrides)
             return web.json_response(features)
 
         @routes.get("/prompt")

@@ -258,6 +258,13 @@ parser.add_argument("--models-directory", type=is_valid_directory, default=None,
 
 parser.add_argument("--enable-compress-response-body", action="store_true", help="Enable compressing response body.")
 
+# ForgeGuard built-in authentication (middleware/auth_middleware.py).
+parser.add_argument("--auth-mode", type=str, default="auto", choices=["auto", "on", "off"], help="Built-in authentication (login page + API key). 'auto' enforces it only when --listen binds a non-loopback address.")
+parser.add_argument("--auth-state-dir", type=str, default=None, help="Directory for generated auth state (API key, password hash, session secret). Default: <base-directory>/auth.")
+parser.add_argument("--api-key-file", type=str, default=None, help="File containing the API key accepted via Authorization: Bearer / X-API-Key. Also settable via the API_KEY environment variable.")
+parser.add_argument("--password-file", type=str, default=None, help="File containing the web-UI login password. Also settable via the WEB_PASSWORD environment variable.")
+parser.add_argument("--session-ttl-hours", type=int, default=168, help="Web-UI session lifetime in hours (default: 168).")
+
 database_default_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "user", "comfyui.db")
 )

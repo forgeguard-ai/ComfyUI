@@ -60,6 +60,8 @@ from protocol import BinaryEventTypes
 
 # Import cache control middleware
 from middleware.cache_middleware import cache_control
+from middleware.auth_middleware import create_auth_middleware
+from app.auth_manager import create_auth_manager_from_args
 
 if args.enable_manager:
     import comfyui_manager
@@ -243,6 +245,12 @@ class PromptServer():
         # ForgeGuard: always-on hardening headers (CSP blocks frontend egress);
         # upstream only arms this with --disable-api-nodes.
         middlewares.append(create_block_external_middleware())
+
+        # ForgeGuard: built-in auth guards every route (incl. /api duplicates,
+        # /internal, static mounts, /ws, and manager routes registered later).
+        self.auth_manager = create_auth_manager_from_args(args)
+        if self.auth_manager is not None:
+            middlewares.append(create_auth_middleware(self.auth_manager))
 
         if args.enable_manager:
             middlewares.append(comfyui_manager.create_middleware())

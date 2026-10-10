@@ -65,6 +65,7 @@ if TYPE_CHECKING:
 from middleware.cache_middleware import cache_control
 from middleware.auth_middleware import create_auth_middleware
 from app.auth_manager import create_auth_manager_from_args
+from app.forgeguard_compat import sanitized_argv
 
 if args.enable_manager:
     import comfyui_manager
@@ -749,6 +750,7 @@ class PromptServer():
                     "pytorch_version": comfy.model_management.torch_version,
                     "embedded_python": os.path.split(os.path.split(sys.executable)[0])[1] == "python_embeded",
                     "deploy_environment": get_deploy_environment(),
+                    "argv": sanitized_argv(sys.argv),
                 },
                 "devices": device_entries
             }

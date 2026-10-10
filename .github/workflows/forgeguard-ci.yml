@@ -28,5 +28,5 @@ jobs:
         run: ruff check .
       - name: ForgeGuard unit tests
         run: |
-          pytest tests-unit/auth_test tests-unit/forgeguard_egress_test.py \
+          pytest tests-unit/auth_test tests-unit/forgeguard_egress_test.py tests-unit/forgeguard_compat_test.py \
                  tests-unit/feature_flags_test.py -q

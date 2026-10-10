@@ -16,7 +16,6 @@ Each sync against upstream re-validates this list; the egress canary test
 | Partner/API nodes (all paid cloud nodes, including the Comfy Cloud nodes added in v0.39; every request proxied through `api.comfy.org` with client metadata headers; failure-path connectivity probe to google.com/baidu.com) | `comfy_api_nodes/` and `tests-unit/comfy_api_nodes_test/` — the whole directories, including files upstream adds later | Cloud service integration |
 | Staging-environment URL rewrites surfaced via `/features` | `comfy/comfy_api_env.py` | comfy.org infrastructure plumbing |
 | `--comfy-api-base` flag | `comfy/cli_args.py` | Only consumer was the above |
-| `argv` field (full process command line) in `GET /system_stats` | `server.py` | Information disclosure to unauthenticated callers in upstream |
 | Dead `download_file` helper | `comfy/k_diffusion/utils.py` | Unused network code |
 | 21 upstream-only GitHub workflows (CLA bot, AI co-author check, PR-template injection, version auto-commits, stale bot, Cursor review, cloud/desktop dispatches, release webhooks, upstream release and Windows packaging builds, CI-container build, `api.comfy.org` stub refresh, `ci.comfy.org` GPU CI) | `.github/workflows/` | Need upstream secrets, call comfy.org services, or run upstream's own release/process automation |
 
@@ -25,6 +24,7 @@ Each sync against upstream re-validates this list; the egress canary test
 | Behavior | Upstream | This fork |
 |---|---|---|
 | No-external-connect CSP + hardening headers (`connect-src 'self'`, nosniff, frame-deny, referrer) | Only with `--offline` (or its deprecated alias `--disable-api-nodes`) | **Always on** — `--offline`, `--disable-api-nodes` and `--disable-partner-nodes` are accepted but change nothing here |
+| `argv` in `GET /system_stats` | Full `sys.argv` verbatim — paths, URLs and secrets passed as flag values, to unauthenticated callers | Flag names only, every value dropped (`app/forgeguard_compat.py`); always includes `--disable-api-nodes`, the frontend's offline signal that suppresses its release-notes check; the endpoint requires auth |
 | Downloading alternative frontends from GitHub (`--front-end-version`) | Allowed | Refused unless `ALLOW_FRONTEND_DOWNLOAD=1`; falls back to the installed `comfyui-frontend-package` |
 
 ## Added

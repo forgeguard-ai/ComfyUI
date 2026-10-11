@@ -36,7 +36,7 @@ Each sync against upstream re-validates this list; the egress canary test
 | Credential bootstrap | Env-or-generate: missing credentials are generated, persisted under the auth state dir (0600), and printed once. |
 | `GET /healthz` | Unauthenticated `{"status":"ok"}` liveness probe (also at `/api/healthz`). `GET /system_stats` now requires auth. |
 | Egress canary | `tests-unit/forgeguard_egress_test.py` fails the build if removed cloud references or directories reappear, and pins the workflow set: kept are `forgeguard-ci`, `ruff`, `check-line-endings`, `openapi-lint`, `test-build`, `test-execution`, `test-launch`, `test-unit` (code checks on GitHub-hosted runners, no secrets). |
-| Unit-suite setup | `tests-unit/conftest.py` puts CPU-only runs in CPU mode (upstream relied on the removed API-node tests for this). `tests-unit/app_test/conftest.py` opts upstream's frontend-download tests into `ALLOW_FRONTEND_DOWNLOAD=1`; `tests-unit/forgeguard_frontend_test.py` checks the default refusal. |
+| Unit-suite setup | `tests-unit/conftest.py` puts CPU-only runs in CPU mode (upstream relied on the removed API-node tests for this). `tests-unit/app_test/conftest.py` opts upstream's frontend-download tests into `ALLOW_FRONTEND_DOWNLOAD=1`; `tests-unit/forgeguard_frontend_test.py` checks the default refusal. `tests-unit/server_test/conftest.py` marks upstream's no-CSP case of `test_csp_header` as a strict expected failure, because CSP is always on; `server_test/forgeguard_csp_test.py` checks the header with and without `--offline`. |
 
 ## Explicitly unchanged
 

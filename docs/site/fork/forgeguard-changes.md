@@ -32,7 +32,7 @@ Each sync against upstream re-validates this list; the egress canary test
 |---|---|
 | Built-in authentication | `middleware/auth_middleware.py` + `app/auth_manager.py`. Login page + `SameSite=Strict` session cookie for the UI; `Authorization: Bearer` / `X-API-Key` for the API; `?token=` accepted on `/ws` only. Guards every route including `/api/*` duplicates, `/internal/*`, static mounts, and manager routes. Per-IP login rate limiting; scrypt password hashing; constant-time comparisons. |
 | Auth flags | `--auth-mode {auto,on,off}` (auto = enforce when `--listen` is non-loopback), `--auth-state-dir`, `--api-key-file`, `--password-file`, `--session-ttl-hours`; env `API_KEY`, `WEB_PASSWORD`, `WEB_USER`. |
-| Credential bootstrap | Env-or-generate: missing credentials are generated, persisted under the auth state dir (0600), and printed once. |
+| Credential bootstrap | Env-or-generate: missing credentials are generated, persisted under the auth state dir (mode 0600 on POSIX; on Windows the files take the directory's ACLs), and printed once. |
 | `GET /healthz` | Unauthenticated `{"status":"ok"}` liveness probe (also at `/api/healthz`). `GET /system_stats` now requires auth. |
 | Egress canary | `tests-unit/forgeguard_egress_test.py` fails the build if removed cloud references reappear. |
 | Unit-suite setup | `tests-unit/conftest.py` puts CPU-only runs in CPU mode (upstream relied on the removed API-node tests for this). `tests-unit/app_test/conftest.py` opts upstream's frontend-download tests into `ALLOW_FRONTEND_DOWNLOAD=1`; `tests-unit/forgeguard_frontend_test.py` checks the default refusal. |

@@ -1,6 +1,9 @@
 """Unit tests for app.auth_manager (stdlib-only module)."""
 
 import os
+import sys
+
+import pytest
 
 from app.auth_manager import (
     API_KEY_PREFIX,
@@ -50,6 +53,7 @@ def test_explicit_credentials_win_and_persist(tmp_path):
     assert b.verify_password("pw-one")
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="POSIX permission bits; Windows applies the directory's ACLs")
 def test_state_files_are_private(tmp_path):
     AuthManager(state_dir=str(tmp_path))
     for name in ("api_key", "password_hash", "session_secret"):

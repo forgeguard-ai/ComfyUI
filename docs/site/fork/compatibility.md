@@ -16,8 +16,9 @@ description: Upstream tracking policy and behavior notes for the ForgeGuard Comf
   enforced they additionally require an API key header (`Authorization: Bearer` or
   `X-API-Key`) or session cookie. `/ws` accepts `?token=`.
 - **Local development:** with the default `--auth-mode auto`, binding only loopback keeps the
-  upstream zero-auth experience. Upstream's own test workflows (`test-launch`,
-  `test-execution`, `test-unit`) run unmodified because they bind `127.0.0.1`.
+  upstream zero-auth experience. Upstream's own test workflows (`test-execution`,
+  `test-unit`) run unmodified because they bind `127.0.0.1`; `test-launch` only
+  checks out this fork instead of upstream's `Comfy-Org/ComfyUI`.
 - **Offline flags:** upstream's `--offline`, its deprecated alias `--disable-api-nodes`, and
   `--disable-partner-nodes` are accepted for compatibility; they change nothing here because the
   CSP is always on and the partner nodes do not exist.

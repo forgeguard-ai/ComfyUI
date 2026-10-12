@@ -371,6 +371,18 @@ comfyui-workflow-templates is not installed.
             check_comfy_packages_versions()
             return cls.default_frontend_path()
 
+        # ForgeGuard: fetching alternative frontends from GitHub is disabled unless
+        # explicitly opted in — this distribution pins the frontend on disk.
+        if os.environ.get("ALLOW_FRONTEND_DOWNLOAD") != "1":
+            logging.error(
+                "Ignoring --front-end-version=%s: downloading frontends is disabled in this "
+                "distribution (set ALLOW_FRONTEND_DOWNLOAD=1 to allow). Using the installed "
+                "frontend package instead.",
+                version_string,
+            )
+            check_comfy_packages_versions()
+            return cls.default_frontend_path()
+
         repo_owner, repo_name, version = cls.parse_version_string(version_string)
 
         if version.startswith("v"):

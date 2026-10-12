@@ -1,0 +1,32 @@
+name: ForgeGuard CI
+
+on:
+  push:
+    branches: [master, main, "claude/**", "forge/**"]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+concurrency:
+  group: forgeguard-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependencies (torch-free)
+        run: pip install ruff aiohttp pytest pyyaml
+      - name: Ruff (repo config)
+        run: ruff check .
+      - name: ForgeGuard unit tests
+        run: |
+          pytest tests-unit/auth_test tests-unit/forgeguard_egress_test.py \
+                 tests-unit/feature_flags_test.py -q

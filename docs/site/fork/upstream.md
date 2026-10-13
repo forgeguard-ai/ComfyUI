@@ -1,6 +1,8 @@
 ---
 title: Upstream
 description: Lineage and upstream links for the ForgeGuard ComfyUI fork.
+order: 30
+status: beta
 ---
 
 # Upstream

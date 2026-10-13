@@ -18,9 +18,9 @@ source:
 
 publishing:
   route: /projects/comfyui/docs
-  versions: both
+  versions: default-branch
   include_generated: false
 
 upstream:
-  repository: comfyanonymous/ComfyUI
+  repository: Comfy-Org/ComfyUI
   tracking_policy: tagged-releases

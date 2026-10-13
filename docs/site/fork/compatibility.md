@@ -1,11 +1,13 @@
 ---
 title: Compatibility
 description: Upstream tracking policy and behavior notes for the ForgeGuard ComfyUI fork.
+order: 20
+status: beta
 ---
 
 # Compatibility
 
-- **Upstream base:** recorded in [`FORK_UPSTREAM_BASE`](../../../FORK_UPSTREAM_BASE) at the
+- **Upstream base:** recorded in [`FORK_UPSTREAM_BASE`](https://github.com/forgeguard-ai/ComfyUI/blob/master/FORK_UPSTREAM_BASE) at the
   repository root. The fork tracks upstream **tagged releases**; syncs are merges (no history
   rewrites) followed by the patch-audit checklist in
   [forgeguard-changes](./forgeguard-changes.md).

@@ -24,3 +24,6 @@ web_custom_versions/
 filtered-openapi.yaml
 uv.lock
 .comfy_environment
+
+# Local agent planning notes; never committed.
+docs/agent-plans/
